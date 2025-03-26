@@ -55,6 +55,9 @@ df_model <- function() {
 deepforest <- NULL
 
 .onLoad <- function(libname, pkgname) {
+  # unset reticulate python environment see:
+  # https://github.com/greta-dev/greta/issues/444
+  Sys.unsetenv("RETICULATE_PYTHON")
   ## assignment in parent environment!
   try(
     {
