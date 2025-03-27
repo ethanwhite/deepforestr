@@ -14,14 +14,24 @@ install_deepforest <- function() {
   } else {
     print(sprintf("Using existing miniconda install at %s", miniconda_path))
   }
-  reticulate::py_install(c("gdal", "rasterio", "fiona"), method = "conda")
+  reticulate::py_install(
+    c("gdal", "rasterio", "fiona"),
+    envname = "deepforest-env",
+    method = "conda",
+    python_version = "3.12",
+  )
   # if (reticulate::py_module_available("mkl")) {
   # Remove package that has caused conflicts on Windows due to double install
   # The correct version of mkl will be installed with deepforest (below)
   # on systems where it is needed
   #  reticulate::conda_remove("r-reticulate", packages = c("mkl"))
   # }
-  reticulate::py_install("DeepForest", method = "conda", pip = TRUE)
+  reticulate::py_install(
+    "DeepForest",
+    envname = "deepforest-env",
+    method = "conda",
+    pip = TRUE
+  )
 }
 
 #' Get example data
@@ -57,10 +67,11 @@ deepforest <- NULL
 .onLoad <- function(libname, pkgname) {
   # unset reticulate python environment see:
   # https://github.com/greta-dev/greta/issues/444
-  Sys.unsetenv("RETICULATE_PYTHON")
   ## assignment in parent environment!
   try(
     {
+      Sys.unsetenv("RETICULATE_PYTHON")
+      reticulate::use_condaenv("deepforest-env", required = TRUE)
       deepforest <<- reticulate::import("deepforest", delay_load = TRUE)
       # Disable due to failure to test on win cran dev platform
       # check_deepforest_availability()
