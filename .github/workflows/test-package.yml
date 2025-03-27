@@ -45,8 +45,6 @@ jobs:
 
       - name: Check basic package load
         run: |
-          library(reticulate)
-          py_config()
           library(deepforestr)
           model = df_model()
         shell: Rscript {0}
