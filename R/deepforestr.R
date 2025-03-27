@@ -15,7 +15,7 @@ install_deepforest <- function() {
     print(sprintf("Using existing miniconda install at %s", miniconda_path))
   }
   reticulate::py_install(
-    c("gdal", "rasterio", "fiona"),
+    c("gdal", "rasterio", "fiona", "numpy==1.*"),
     envname = "deepforest-env",
     method = "conda",
     python_version = "3.12",
@@ -58,6 +58,9 @@ get_data <- function(path) {
 #' @importFrom reticulate import r_to_py
 #' @export
 df_model <- function() {
+  reticulate::py_require("deepforest")
+  print(deepforest)
+  print(reticulate::py_config())
   deepforest$main$deepforest()
 }
 

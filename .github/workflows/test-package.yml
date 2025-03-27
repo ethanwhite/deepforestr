@@ -46,5 +46,5 @@ jobs:
       - name: Check basic package load
         run: |
           library(deepforestr)
-          model = df_model()
+          df_model()
         shell: Rscript {0}
